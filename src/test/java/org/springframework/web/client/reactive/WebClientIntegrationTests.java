@@ -58,6 +58,19 @@ public class WebClientIntegrationTests {
 	}
 
 	@Test
+	public void getStringFromApplicationJson() {
+		HttpUrl baseUrl = server.url("/person");
+		String body = "{\"id\":\"1\",\"firstname\":\"first\",\"lastname\":\"last\"}";
+		this.server.enqueue(new MockResponse().setHeader("Content-Type", "application/json").setBody(body));
+
+		ResponseEntity<String> result = this.webClient
+				.perform(get(baseUrl.toString()))
+				.extract(response(String.class)).get();
+
+		assertEquals(body,result.getBody());
+	}
+
+	@Test
 	public void shouldGetHeaders() throws Exception {
 
 		HttpUrl baseUrl = server.url("/greeting?name=Spring");
